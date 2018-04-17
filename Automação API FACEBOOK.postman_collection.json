@@ -1,0 +1,2113 @@
+{
+	"info": {
+		"name": "Automação API FACEBOOK",
+		"_postman_id": "74c27cfc-956c-c522-ba6b-bd3a66a22d20",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Post - Usuário com permissão",
+			"description": "",
+			"item": [
+				{
+					"name": "Token Application",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"var JsonData = JSON.parse(responseBody);",
+									"",
+									"var token = JsonData.access_token;",
+									"pm.globals.set(\"token\", token);",
+									"",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"var token_type = JsonData.token_type;",
+									"",
+									"  var token_type = JsonData.token_type;",
+									"pm.test(\"Tipo do Token = bearer\", function(){",
+									"    pm.expect(token_type).to.eql(\"bearer\");",
+									"});",
+									"",
+									"",
+									"var i = 1;",
+									"var application_token = JsonData.access_token;",
+									"var primeirosNumerosToken = application_token[0];",
+									"",
+									"while(application_token[i] != \"|\"){",
+									"    ",
+									"   primeirosNumerosToken = primeirosNumerosToken+application_token[i];",
+									"   i++;",
+									"}",
+									"",
+									"var application_token = JsonData.access_token;",
+									"",
+									" ",
+									"pm.test(\"Primeiros numeros do Token = Id Aplicativo\", function(){",
+									"    pm.expect(primeirosNumerosToken).to.eql(\"2049493408664736\");",
+									"});",
+									"",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/oauth/access_token?client_id=2049493408664736&client_secret=e9ba2f5b4896793ecea3ad78ad7d2c1e&grant_type=client_credentials",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"oauth",
+								"access_token"
+							],
+							"query": [
+								{
+									"key": "client_id",
+									"value": "2049493408664736",
+									"equals": true
+								},
+								{
+									"key": "client_secret",
+									"value": "e9ba2f5b4896793ecea3ad78ad7d2c1e",
+									"equals": true
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Token User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"",
+									"//Bob Albeejbehfgja Martinazziman sem permissão",
+									"//var token_user = data.data[0].access_token;",
+									"//var user = data.data[0].id;",
+									"",
+									"//Mary Albedigdhgcij Greenestein com permissão",
+									"var token_user = data.data[1].access_token;",
+									"var user = data.data[1].id;",
+									"",
+									"pm.globals.set(\"token_user\", token_user);",
+									"pm.globals.set(\"user\", user);",
+									"",
+									"",
+									"",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"USER ID = 104497773743472\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data[1].id).to.eql(\"104497773743472\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"login_url não é nulo\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data[1].login_url) !== null;",
+									"    pm.expect(jsonData.data[1].login_url) !== \"\";",
+									"});",
+									"",
+									"",
+									"pm.test(\"access_token não é nulo\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data[1].access_token) !== null;",
+									"    pm.expect(jsonData.data[1].access_token) !== \"\";",
+									"});",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/2049493408664736/accounts/test-users?access_token={{token}}",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"2049493408664736",
+								"accounts",
+								"test-users"
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "{{token}}",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Post mensagem",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"",
+									"var id_post = data.id;",
+									"",
+									"pm.globals.set(\"id_post\", id_post);",
+									"",
+									"var i = 1;",
+									"",
+									"var primeirosNumerosId = id_post[0];",
+									"",
+									"while(id_post[i] != \"_\"){",
+									"    ",
+									"   primeirosNumerosId = primeirosNumerosId+id_post[i];",
+									"   i++;",
+									"}",
+									"",
+									"",
+									"pm.test(\"Primeiros numeros do ID = Id User\", function(){",
+									"    pm.expect(primeirosNumerosId).to.eql(\"104497773743472\");",
+									"});",
+									"",
+									"",
+									""
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"var msg =1;",
+									"",
+									"globals.msg === undefined ? pm.globals.set(\"msg\", msg) : pm.globals.set(\"msg\", globals.msg+1);",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "message",
+									"value": "Teste mensagem para Automação Testes {{msg}}",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/{{user}}/feed?access_token={{token_user}}",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"{{user}}",
+								"feed"
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "{{token_user}}",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta Post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"",
+									"pm.test(\"ID_post correto\", function () {",
+									"    pm.expect(jsonData.id).to.eql(globals.id_post);",
+									"});",
+									"",
+									"pm.test(\"Mensagem correta\", function () {",
+									"    pm.expect(jsonData.message).to.eql(\"Teste mensagem para Automação Testes \"+globals.msg);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "message",
+									"value": "thi",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/{{id_post}}/?access_token={{token_user}}",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"{{id_post}}",
+								""
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "{{token_user}}",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Alterar Post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Sucesso = true\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.eql(true);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "message",
+									"value": "ola",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/{{id_post}}/?access_token={{token_user}}",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"{{id_post}}",
+								""
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "{{token_user}}",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta Post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"",
+									"pm.test(\"ID_post correto\", function () {",
+									"    pm.expect(jsonData.id).to.eql(globals.id_post);",
+									"});",
+									"",
+									"pm.test(\"Mensagem correta\", function () {",
+									"    pm.expect(jsonData.message).to.eql(\"ola\");",
+									"});",
+									"",
+									"",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "message",
+									"value": "thi",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/{{id_post}}/?access_token={{token_user}}",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"{{id_post}}",
+								""
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "{{token_user}}",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Post Link - Usuário com permissão",
+			"description": "",
+			"item": [
+				{
+					"name": "Token Application",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"var JsonData = JSON.parse(responseBody);",
+									"",
+									"var token = JsonData.access_token;",
+									"pm.globals.set(\"token\", token);",
+									"",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"var token_type = JsonData.token_type;",
+									"",
+									"  var token_type = JsonData.token_type;",
+									"pm.test(\"Tipo do Token = bearer\", function(){",
+									"    pm.expect(token_type).to.eql(\"bearer\");",
+									"});",
+									"",
+									"",
+									"var i = 1;",
+									"var application_token = JsonData.access_token;",
+									"var primeirosNumerosToken = application_token[0];",
+									"",
+									"while(application_token[i] != \"|\"){",
+									"    ",
+									"   primeirosNumerosToken = primeirosNumerosToken+application_token[i];",
+									"   i++;",
+									"}",
+									"",
+									"var application_token = JsonData.access_token;",
+									"",
+									" ",
+									"pm.test(\"Primeiros numeros do Token = Id Aplicativo\", function(){",
+									"    pm.expect(primeirosNumerosToken).to.eql(\"2049493408664736\");",
+									"});",
+									"",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/oauth/access_token?client_id=2049493408664736&client_secret=e9ba2f5b4896793ecea3ad78ad7d2c1e&grant_type=client_credentials",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"oauth",
+								"access_token"
+							],
+							"query": [
+								{
+									"key": "client_id",
+									"value": "2049493408664736",
+									"equals": true
+								},
+								{
+									"key": "client_secret",
+									"value": "e9ba2f5b4896793ecea3ad78ad7d2c1e",
+									"equals": true
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Token User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"",
+									"//Bob Albeejbehfgja Martinazziman sem permissão",
+									"//var token_user = data.data[0].access_token;",
+									"//var user = data.data[0].id;",
+									"",
+									"//Mary Albedigdhgcij Greenestein com permissão",
+									"var token_user = data.data[1].access_token;",
+									"var user = data.data[1].id;",
+									"",
+									"pm.globals.set(\"token_user\", token_user);",
+									"pm.globals.set(\"user\", user);",
+									"",
+									"",
+									"",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"USER ID = 104497773743472\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data[1].id).to.eql(\"104497773743472\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"login_url não é nulo\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data[1].login_url) !== null;",
+									"    pm.expect(jsonData.data[1].login_url) !== \"\";",
+									"});",
+									"",
+									"",
+									"pm.test(\"access_token não é nulo\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data[1].access_token) !== null;",
+									"    pm.expect(jsonData.data[1].access_token) !== \"\";",
+									"});",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/2049493408664736/accounts/test-users?access_token={{token}}",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"2049493408664736",
+								"accounts",
+								"test-users"
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "{{token}}",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Post mensagem",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"",
+									"var id_post = data.id;",
+									"",
+									"pm.globals.set(\"id_post\", id_post);",
+									"",
+									"var i = 1;",
+									"",
+									"var primeirosNumerosId = id_post[0];",
+									"",
+									"while(id_post[i] != \"_\"){",
+									"    ",
+									"   primeirosNumerosId = primeirosNumerosId+id_post[i];",
+									"   i++;",
+									"}",
+									"",
+									"",
+									"pm.test(\"Primeiros numeros do ID = Id User\", function(){",
+									"    pm.expect(primeirosNumerosId).to.eql(\"104497773743472\");",
+									"});",
+									"",
+									"",
+									""
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "link",
+									"value": "https://sensedia.com/",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/{{user}}/feed?access_token={{token_user}}",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"{{user}}",
+								"feed"
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "{{token_user}}",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta Post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"",
+									"pm.test(\"ID_post correto\", function () {",
+									"    pm.expect(jsonData.id).to.eql(globals.id_post);",
+									"});",
+									"",
+									"pm.test(\"Mensagem correta\", function () {",
+									"    pm.expect(jsonData.story).to.eql(\"Mary Albedigdhgcij Greenestein shared a link.\");",
+									"});",
+									"",
+									"",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "message",
+									"value": "thi",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/{{id_post}}/?access_token={{token_user}}",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"{{id_post}}",
+								""
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "{{token_user}}",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Alterar Post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Sucesso = true\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.eql(true);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "message",
+									"value": "ola",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/{{id_post}}/?access_token={{token_user}}",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"{{id_post}}",
+								""
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "{{token_user}}",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta Post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"",
+									"pm.test(\"ID_post correto\", function () {",
+									"    pm.expect(jsonData.id).to.eql(globals.id_post);",
+									"});",
+									"",
+									"pm.test(\"Mensagem correta\", function () {",
+									"    pm.expect(jsonData.message).to.eql(\"ola\");",
+									"});",
+									"",
+									"",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "message",
+									"value": "thi",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/{{id_post}}/?access_token={{token_user}}",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"{{id_post}}",
+								""
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "{{token_user}}",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Post - Usuário sem permissão",
+			"description": "",
+			"item": [
+				{
+					"name": "Token Application",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"var JsonData = JSON.parse(responseBody);",
+									"",
+									"var token = JsonData.access_token;",
+									"pm.globals.set(\"token\", token);",
+									"",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"var token_type = JsonData.token_type;",
+									"",
+									"  var token_type = JsonData.token_type;",
+									"pm.test(\"Tipo do Token = bearer\", function(){",
+									"    pm.expect(token_type).to.eql(\"bearer\");",
+									"});",
+									"",
+									"",
+									"var i = 1;",
+									"var application_token = JsonData.access_token;",
+									"var primeirosNumerosToken = application_token[0];",
+									"",
+									"while(application_token[i] != \"|\"){",
+									"    ",
+									"   primeirosNumerosToken = primeirosNumerosToken+application_token[i];",
+									"   i++;",
+									"}",
+									"",
+									"var application_token = JsonData.access_token;",
+									"",
+									" ",
+									"pm.test(\"Primeiros numeros do Token = Id Aplicativo\", function(){",
+									"    pm.expect(primeirosNumerosToken).to.eql(\"2049493408664736\");",
+									"});",
+									"",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/oauth/access_token?client_id=2049493408664736&client_secret=e9ba2f5b4896793ecea3ad78ad7d2c1e&grant_type=client_credentials",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"oauth",
+								"access_token"
+							],
+							"query": [
+								{
+									"key": "client_id",
+									"value": "2049493408664736",
+									"equals": true
+								},
+								{
+									"key": "client_secret",
+									"value": "e9ba2f5b4896793ecea3ad78ad7d2c1e",
+									"equals": true
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Token User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"",
+									"//Bob Albeejbehfgja Martinazziman sem permissão",
+									"var token_user = data.data[0].access_token;",
+									"var user = data.data[0].id;",
+									"",
+									"//Mary Albedigdhgcij Greenestein com permissão",
+									"//var token_user = data.data[1].access_token;",
+									"//var user = data.data[1].id;",
+									"",
+									"pm.globals.set(\"token_user\", token_user);",
+									"pm.globals.set(\"user\", user);",
+									"",
+									"",
+									"",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"USER ID = 104497773743472\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data[1].id).to.eql(\"104497773743472\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"login_url não é nulo\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data[1].login_url) !== null;",
+									"    pm.expect(jsonData.data[1].login_url) !== \"\";",
+									"});",
+									"",
+									"",
+									"pm.test(\"access_token não é nulo\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data[1].access_token) !== null;",
+									"    pm.expect(jsonData.data[1].access_token) !== \"\";",
+									"});",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/2049493408664736/accounts/test-users?access_token={{token}}",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"2049493408664736",
+								"accounts",
+								"test-users"
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "{{token}}",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Post mensagem",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 403\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});",
+									"",
+									"pm.test(\"Mensagem de falta de permissão\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.error.message).to.eql(\"(#200) Requires either publish_actions permission, or manage_pages and publish_pages as an admin with sufficient administrative permission\");",
+									"});",
+									"",
+									""
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"var msg =1;",
+									"",
+									"globals.msg === undefined ? pm.globals.set(\"msg\", msg) : pm.globals.set(\"msg\", globals.msg+1);",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "message",
+									"value": "Teste mensagem para Automação Testes {{msg}}",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/{{user}}/feed?access_token={{token_user}}",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"{{user}}",
+								"feed"
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "{{token_user}}",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ID Usuário inválido",
+			"description": "",
+			"item": [
+				{
+					"name": "Token Application",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"var JsonData = JSON.parse(responseBody);",
+									"",
+									"var token = JsonData.access_token;",
+									"pm.globals.set(\"token\", token);",
+									"",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"var token_type = JsonData.token_type;",
+									"",
+									"  var token_type = JsonData.token_type;",
+									"pm.test(\"Tipo do Token = bearer\", function(){",
+									"    pm.expect(token_type).to.eql(\"bearer\");",
+									"});",
+									"",
+									"",
+									"var i = 1;",
+									"var application_token = JsonData.access_token;",
+									"var primeirosNumerosToken = application_token[0];",
+									"",
+									"while(application_token[i] != \"|\"){",
+									"    ",
+									"   primeirosNumerosToken = primeirosNumerosToken+application_token[i];",
+									"   i++;",
+									"}",
+									"",
+									"var application_token = JsonData.access_token;",
+									"",
+									" ",
+									"pm.test(\"Primeiros numeros do Token = Id Aplicativo\", function(){",
+									"    pm.expect(primeirosNumerosToken).to.eql(\"2049493408664736\");",
+									"});",
+									"",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/oauth/access_token?client_id=2049493408664736&client_secret=e9ba2f5b4896793ecea3ad78ad7d2c1e&grant_type=client_credentials",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"oauth",
+								"access_token"
+							],
+							"query": [
+								{
+									"key": "client_id",
+									"value": "2049493408664736",
+									"equals": true
+								},
+								{
+									"key": "client_secret",
+									"value": "e9ba2f5b4896793ecea3ad78ad7d2c1e",
+									"equals": true
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Token User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"",
+									"//Bob Albeejbehfgja Martinazziman sem permissão",
+									"//var token_user = data.data[0].access_token;",
+									"//var user = data.data[0].id;",
+									"",
+									"//Mary Albedigdhgcij Greenestein com permissão",
+									"var token_user = data.data[1].access_token;",
+									"var user = data.data[1].id;",
+									"",
+									"pm.globals.set(\"token_user\", token_user);",
+									"pm.globals.set(\"user\", user);",
+									"",
+									"",
+									"",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"USER ID = 104497773743472\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data[1].id).to.eql(\"104497773743472\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"login_url não é nulo\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data[1].login_url) !== null;",
+									"    pm.expect(jsonData.data[1].login_url) !== \"\";",
+									"});",
+									"",
+									"",
+									"pm.test(\"access_token não é nulo\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data[1].access_token) !== null;",
+									"    pm.expect(jsonData.data[1].access_token) !== \"\";",
+									"});",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/2049493408664736/accounts/test-users?access_token={{token}}",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"2049493408664736",
+								"accounts",
+								"test-users"
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "{{token}}",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Post mensagem",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Mensagem de Usuário Inválido\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.error.message).to.eql(\"Unsupported post request. Object with ID '104497773743555' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api\");",
+									"});",
+									"",
+									""
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"var msg =1;",
+									"",
+									"globals.msg === undefined ? pm.globals.set(\"msg\", msg) : pm.globals.set(\"msg\", globals.msg+1);",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "message",
+									"value": "Teste mensagem para Automação Testes {{msg}}",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/104497773743555/feed?access_token={{token_user}}",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"104497773743555",
+								"feed"
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "{{token_user}}",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tokens inválidos",
+			"description": "",
+			"item": [
+				{
+					"name": "Token Application",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"var JsonData = JSON.parse(responseBody);",
+									"",
+									"var token = JsonData.access_token;",
+									"pm.globals.set(\"token\", token);",
+									"",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"var token_type = JsonData.token_type;",
+									"",
+									"  var token_type = JsonData.token_type;",
+									"pm.test(\"Tipo do Token = bearer\", function(){",
+									"    pm.expect(token_type).to.eql(\"bearer\");",
+									"});",
+									"",
+									"",
+									"var i = 1;",
+									"var application_token = JsonData.access_token;",
+									"var primeirosNumerosToken = application_token[0];",
+									"",
+									"while(application_token[i] != \"|\"){",
+									"    ",
+									"   primeirosNumerosToken = primeirosNumerosToken+application_token[i];",
+									"   i++;",
+									"}",
+									"",
+									"var application_token = JsonData.access_token;",
+									"",
+									" ",
+									"pm.test(\"Primeiros numeros do Token = Id Aplicativo\", function(){",
+									"    pm.expect(primeirosNumerosToken).to.eql(\"2049493408664736\");",
+									"});",
+									"",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/oauth/access_token?client_id=2049493408664736&client_secret=e9ba2f5b4896793ecea3ad78ad7d2c1e&grant_type=client_credentials",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"oauth",
+								"access_token"
+							],
+							"query": [
+								{
+									"key": "client_id",
+									"value": "2049493408664736",
+									"equals": true
+								},
+								{
+									"key": "client_secret",
+									"value": "e9ba2f5b4896793ecea3ad78ad7d2c1e",
+									"equals": true
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Token User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"",
+									"",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Mensagem de Token Inválido\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.error.message).to.eql(\"Invalid OAuth access token.\");",
+									"});",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/2049493408664736/accounts/test-users?access_token=123",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"2049493408664736",
+								"accounts",
+								"test-users"
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "123",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Post mensagem",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Mensagem de Token Inválido\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.error.message).to.eql(\"Invalid OAuth access token.\");",
+									"});",
+									"",
+									""
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"var msg =1;",
+									"",
+									"globals.msg === undefined ? pm.globals.set(\"msg\", msg) : pm.globals.set(\"msg\", globals.msg+1);",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "message",
+									"value": "Teste mensagem para Automação Testes {{msg}}",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/{{user}}/feed?access_token=123",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"{{user}}",
+								"feed"
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "123",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Id post Inválido",
+			"description": "",
+			"item": [
+				{
+					"name": "Token Application",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"var JsonData = JSON.parse(responseBody);",
+									"",
+									"var token = JsonData.access_token;",
+									"pm.globals.set(\"token\", token);",
+									"",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"var token_type = JsonData.token_type;",
+									"",
+									"  var token_type = JsonData.token_type;",
+									"pm.test(\"Tipo do Token = bearer\", function(){",
+									"    pm.expect(token_type).to.eql(\"bearer\");",
+									"});",
+									"",
+									"",
+									"var i = 1;",
+									"var application_token = JsonData.access_token;",
+									"var primeirosNumerosToken = application_token[0];",
+									"",
+									"while(application_token[i] != \"|\"){",
+									"    ",
+									"   primeirosNumerosToken = primeirosNumerosToken+application_token[i];",
+									"   i++;",
+									"}",
+									"",
+									"var application_token = JsonData.access_token;",
+									"",
+									" ",
+									"pm.test(\"Primeiros numeros do Token = Id Aplicativo\", function(){",
+									"    pm.expect(primeirosNumerosToken).to.eql(\"2049493408664736\");",
+									"});",
+									"",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/oauth/access_token?client_id=2049493408664736&client_secret=e9ba2f5b4896793ecea3ad78ad7d2c1e&grant_type=client_credentials",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"oauth",
+								"access_token"
+							],
+							"query": [
+								{
+									"key": "client_id",
+									"value": "2049493408664736",
+									"equals": true
+								},
+								{
+									"key": "client_secret",
+									"value": "e9ba2f5b4896793ecea3ad78ad7d2c1e",
+									"equals": true
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Token User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"",
+									"//Bob Albeejbehfgja Martinazziman sem permissão",
+									"//var token_user = data.data[0].access_token;",
+									"//var user = data.data[0].id;",
+									"",
+									"//Mary Albedigdhgcij Greenestein com permissão",
+									"var token_user = data.data[1].access_token;",
+									"var user = data.data[1].id;",
+									"",
+									"pm.globals.set(\"token_user\", token_user);",
+									"pm.globals.set(\"user\", user);",
+									"",
+									"",
+									"",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"USER ID = 104497773743472\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data[1].id).to.eql(\"104497773743472\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"login_url não é nulo\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data[1].login_url) !== null;",
+									"    pm.expect(jsonData.data[1].login_url) !== \"\";",
+									"});",
+									"",
+									"",
+									"pm.test(\"access_token não é nulo\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data[1].access_token) !== null;",
+									"    pm.expect(jsonData.data[1].access_token) !== \"\";",
+									"});",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/2049493408664736/accounts/test-users?access_token={{token}}",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"2049493408664736",
+								"accounts",
+								"test-users"
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "{{token}}",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Post mensagem",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"",
+									"var id_post = data.id;",
+									"",
+									"pm.globals.set(\"id_post\", id_post);",
+									"",
+									"var i = 1;",
+									"",
+									"var primeirosNumerosId = id_post[0];",
+									"",
+									"while(id_post[i] != \"_\"){",
+									"    ",
+									"   primeirosNumerosId = primeirosNumerosId+id_post[i];",
+									"   i++;",
+									"}",
+									"",
+									"",
+									"pm.test(\"Primeiros numeros do ID = Id User\", function(){",
+									"    pm.expect(primeirosNumerosId).to.eql(\"104497773743472\");",
+									"});",
+									"",
+									"",
+									""
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"var msg =1;",
+									"",
+									"globals.msg === undefined ? pm.globals.set(\"msg\", msg) : pm.globals.set(\"msg\", globals.msg+1);",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "message",
+									"value": "Teste mensagem para Automação Testes {{msg}}",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/{{user}}/feed?access_token={{token_user}}",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"{{user}}",
+								"feed"
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "{{token_user}}",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta Post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"",
+									"pm.test(\"ID_post correto\", function () {",
+									"    pm.expect(jsonData.id).to.eql(globals.id_post);",
+									"});",
+									"",
+									"pm.test(\"Mensagem correta\", function () {",
+									"    pm.expect(jsonData.message).to.eql(\"Teste mensagem para Automação Testes \"+globals.msg);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "message",
+									"value": "thi",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/{{id_post}}/?access_token={{token_user}}",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"{{id_post}}",
+								""
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "{{token_user}}",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Alterar Post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"",
+									"",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Mensagem de ID Inválido\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.error.message).to.eql(\"(#100) Invalid post id\");",
+									"});",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "message",
+									"value": "ola",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/104497773743472_99999489979034/?access_token={{token_user}}",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"104497773743472_99999489979034",
+								""
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "{{token_user}}",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta Post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Mensagem de ID Inválido\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.error.message).to.eql(\"Unsupported get request. Object with ID '104497773743472_99999489979034' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api\");",
+									"});",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "message",
+									"value": "thi",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://graph.facebook.com/v2.12/104497773743472_99999489979034/?access_token={{token_user}}",
+							"protocol": "https",
+							"host": [
+								"graph",
+								"facebook",
+								"com"
+							],
+							"path": [
+								"v2.12",
+								"104497773743472_99999489979034",
+								""
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "{{token_user}}",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
